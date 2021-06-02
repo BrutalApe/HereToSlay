@@ -78,6 +78,14 @@ enum card_hero {
 	Magus_Moose = 64,
     First = 1,
     Last = 64,
+    Bard_First = 1,
+    Fighter_First = 9,
+    Guardian_First = 17,
+    Ranger_First = 25,
+    Thief_First = 33,
+    Wizard_First = 41,
+    Warrior_First = 49,
+    Druid_First = 57,
 };
 
 enum card_magic {
@@ -206,6 +214,16 @@ public class HUD : CanvasLayer
     public Button back_btn = new Button();
 
     public OptionButton hero_choice = new OptionButton();
+
+    public OptionButton bard_choice = new OptionButton();
+    public OptionButton fighter_choice = new OptionButton();
+    public OptionButton guardian_choice = new OptionButton();
+    public OptionButton ranger_choice = new OptionButton();
+    public OptionButton thief_choice = new OptionButton();
+    public OptionButton wizard_choice = new OptionButton();
+    public OptionButton warrior_choice = new OptionButton();
+    public OptionButton druid_choice = new OptionButton();
+
     public OptionButton item_choice = new OptionButton();
     public OptionButton magic_choice = new OptionButton();
     public OptionButton instant_choice = new OptionButton();
@@ -228,7 +246,17 @@ public class HUD : CanvasLayer
     {
         FollowViewportEnable = true;
 
-        hero_choice = addOptionButton(tb_range_3, lr_range_2, (int)card_hero.First, (int)card_hero.Last);
+        hero_choice = addOptionButton(tb_range_3, lr_range_2, (int)card_item.First, (int)card_item.First+7);
+        
+        bard_choice = addOptionButton(tb_range_3, lr_range_3, (int)card_hero.Bard_First, (int)card_hero.Bard_First+7);
+        fighter_choice = addOptionButton(tb_range_3, lr_range_3, (int)card_hero.Fighter_First, (int)card_hero.Fighter_First+7);
+        guardian_choice = addOptionButton(tb_range_3, lr_range_3, (int)card_hero.Guardian_First, (int)card_hero.Guardian_First+7);
+        ranger_choice = addOptionButton(tb_range_3, lr_range_3, (int)card_hero.Ranger_First, (int)card_hero.Ranger_First+7);
+        thief_choice = addOptionButton(tb_range_3, lr_range_3, (int)card_hero.Thief_First, (int)card_hero.Thief_First+7);
+        wizard_choice = addOptionButton(tb_range_3, lr_range_3, (int)card_hero.Wizard_First, (int)card_hero.Wizard_First+7);
+        warrior_choice = addOptionButton(tb_range_3, lr_range_3, (int)card_hero.Warrior_First, (int)card_hero.Warrior_First+7);
+        druid_choice = addOptionButton(tb_range_3, lr_range_3, (int)card_hero.Druid_First, (int)card_hero.Druid_First+7);
+        
         item_choice = addOptionButton(tb_range_3, lr_range_2, (int)card_item.First, (int)card_item.Last);
         magic_choice = addOptionButton(tb_range_3, lr_range_2, (int)card_magic.First, (int)card_magic.Last);
         instant_choice = addOptionButton(tb_range_3, lr_range_2, (int)card_instant.First, (int)card_instant.Last);
@@ -287,6 +315,20 @@ public class HUD : CanvasLayer
         return o_btn;
     }
 
+    public void hideHeroChoices()
+    {
+        bard_choice.Hide();
+        fighter_choice.Hide();
+        guardian_choice.Hide();
+        ranger_choice.Hide();
+        thief_choice.Hide();
+        wizard_choice.Hide();
+        warrior_choice.Hide();
+        druid_choice.Hide();
+
+        return;
+    }
+
     public void menuHide()
     {
         hero.Hide();
@@ -318,6 +360,8 @@ public class HUD : CanvasLayer
         instant_choice.Hide();
         leader_choice.Hide();
         monster_choice.Hide();
+        
+        hideHeroChoices();
 
         return;
     }
@@ -338,6 +382,15 @@ public class HUD : CanvasLayer
             menuShow();
             response_value = (int)buttons.Back;
         }
+
+        if(hero_choice.GetSelectedId() == (int)card_item.Bard)      {hideHeroChoices(); bard_choice.Show();}
+        if(hero_choice.GetSelectedId() == (int)card_item.Fighter)   {hideHeroChoices(); fighter_choice.Show();}
+        if(hero_choice.GetSelectedId() == (int)card_item.Guardian)  {hideHeroChoices(); guardian_choice.Show();}
+        if(hero_choice.GetSelectedId() == (int)card_item.Ranger)    {hideHeroChoices(); ranger_choice.Show();}
+        if(hero_choice.GetSelectedId() == (int)card_item.Thief)     {hideHeroChoices(); thief_choice.Show();}
+        if(hero_choice.GetSelectedId() == (int)card_item.Wizard)    {hideHeroChoices(); wizard_choice.Show();}
+        if(hero_choice.GetSelectedId() == (int)card_item.Warrior)   {hideHeroChoices(); warrior_choice.Show();}
+        if(hero_choice.GetSelectedId() == (int)card_item.Druid)     {hideHeroChoices(); druid_choice.Show();}
 
         return response_value;
     }
