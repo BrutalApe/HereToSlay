@@ -9,3 +9,7 @@ Taking the old rubik code and repurposing that, instead of starting from scratch
 6/1/21
 Properly created repo for HereToSlay, and added buttons for the 
 different categories of cards. Lots of organization as well.
+
+6/3/21
+fixed optionButton for hero choice selection.
+Can reuse the system for item variations if desired

@@ -315,7 +315,7 @@ public class HUD : CanvasLayer
         return o_btn;
     }
 
-    public void hideHeroChoices()
+    public void hideHeroChoices(int exception)
     {
         bard_choice.Hide();
         fighter_choice.Hide();
@@ -325,6 +325,19 @@ public class HUD : CanvasLayer
         wizard_choice.Hide();
         warrior_choice.Hide();
         druid_choice.Hide();
+
+        switch (exception)
+        {
+            case (int)card_item.Bard:       bard_choice.Show(); break;
+            case (int)card_item.Fighter:    fighter_choice.Show(); break;
+            case (int)card_item.Guardian:   guardian_choice.Show(); break;
+            case (int)card_item.Ranger:     ranger_choice.Show(); break;
+            case (int)card_item.Thief:      thief_choice.Show(); break;
+            case (int)card_item.Wizard:     wizard_choice.Show(); break;
+            case (int)card_item.Warrior:    warrior_choice.Show(); break;
+            case (int)card_item.Druid:      druid_choice.Show(); break;
+            default:    break;
+        }
 
         return;
     }
@@ -361,11 +374,12 @@ public class HUD : CanvasLayer
         leader_choice.Hide();
         monster_choice.Hide();
         
-        hideHeroChoices();
+        hideHeroChoices(0);
 
         return;
     }
 
+    int hero_selected = -1;
     public int buttonProcess(float delta)
     {
         int response_value = 0;
@@ -383,15 +397,19 @@ public class HUD : CanvasLayer
             response_value = (int)buttons.Back;
         }
 
-        if(hero_choice.GetSelectedId() == (int)card_item.Bard)      {hideHeroChoices(); bard_choice.Show();}
-        if(hero_choice.GetSelectedId() == (int)card_item.Fighter)   {hideHeroChoices(); fighter_choice.Show();}
-        if(hero_choice.GetSelectedId() == (int)card_item.Guardian)  {hideHeroChoices(); guardian_choice.Show();}
-        if(hero_choice.GetSelectedId() == (int)card_item.Ranger)    {hideHeroChoices(); ranger_choice.Show();}
-        if(hero_choice.GetSelectedId() == (int)card_item.Thief)     {hideHeroChoices(); thief_choice.Show();}
-        if(hero_choice.GetSelectedId() == (int)card_item.Wizard)    {hideHeroChoices(); wizard_choice.Show();}
-        if(hero_choice.GetSelectedId() == (int)card_item.Warrior)   {hideHeroChoices(); warrior_choice.Show();}
-        if(hero_choice.GetSelectedId() == (int)card_item.Druid)     {hideHeroChoices(); druid_choice.Show();}
-
+        if (hero.Pressed == true || hero_selected != hero_choice.Selected)
+        {
+            if(hero_choice.GetSelectedId() == (int)card_item.Bard)      {hideHeroChoices((int)card_item.Bard);}
+            if(hero_choice.GetSelectedId() == (int)card_item.Fighter)   {hideHeroChoices((int)card_item.Fighter);}
+            if(hero_choice.GetSelectedId() == (int)card_item.Guardian)  {hideHeroChoices((int)card_item.Guardian);}
+            if(hero_choice.GetSelectedId() == (int)card_item.Ranger)    {hideHeroChoices((int)card_item.Ranger);}
+            if(hero_choice.GetSelectedId() == (int)card_item.Thief)     {hideHeroChoices((int)card_item.Thief);}
+            if(hero_choice.GetSelectedId() == (int)card_item.Wizard)    {hideHeroChoices((int)card_item.Wizard);}
+            if(hero_choice.GetSelectedId() == (int)card_item.Warrior)   {hideHeroChoices((int)card_item.Warrior);}
+            if(hero_choice.GetSelectedId() == (int)card_item.Druid)     {hideHeroChoices((int)card_item.Druid);}
+            hero_selected = hero_choice.Selected;
+        }
+        
         return response_value;
     }
 
