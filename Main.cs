@@ -20,7 +20,7 @@ public class Main : Node
         CanvasLayer hud = (CanvasLayer)new_hud.Instance();
         AddChild(hud);
 
-        hud.Call("menuShow");
+        hud.Call("mainMenu");
 
         return hud;
     }
@@ -64,7 +64,7 @@ public class Main : Node
         
         if ((result >= (int)buttons.Hero) && (result <= (int)buttons.Monster))
         {
-            HUD.Call("menuHide");
+            HUD.Call("chooseCard");
 
             return;
         }

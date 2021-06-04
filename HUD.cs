@@ -179,6 +179,13 @@ enum card_monster {
     Last = 130,
 };
 
+enum destinations {
+    Party = 131,
+    Hand = 132,
+    First = 131,
+    Last = 132,
+};
+
 public class HUD : CanvasLayer
 {
     string[] card_names = {"NULL",
@@ -202,7 +209,9 @@ public class HUD : CanvasLayer
 	
     "The Charismatic Song","The Fist of Reason","The Protecting Horn","The Divine Arrow","The Shadow Claw","The Cloaked Sage","The Piercing Howl","The Noble Shaman",
 	
-    "Dracos","Arctic Aries","Terratuga","Abyss Queen","Bloodwing","Crowned Serpent","Dark Dragon King","Titan Wyvern","Rex Major","Malamammoth","Warworn Owlbear","Orthus","Anuran Cauldron","Corrupted Sabretooth","Mega Slime","Muscipula Rex","Feral Dragon"
+    "Dracos","Arctic Aries","Terratuga","Abyss Queen","Bloodwing","Crowned Serpent","Dark Dragon King","Titan Wyvern","Rex Major","Malamammoth","Warworn Owlbear","Orthus","Anuran Cauldron","Corrupted Sabretooth","Mega Slime","Muscipula Rex","Feral Dragon",
+
+    "Party", "Hand"
     };
 
     public Button hero = new Button();
@@ -211,6 +220,8 @@ public class HUD : CanvasLayer
     public Button instant = new Button();
     public Button leader = new Button();
     public Button monster = new Button();
+    public Button add_card_btn = new Button();
+    public Button rmv_card_btn = new Button();
     public Button back_btn = new Button();
 
     public OptionButton hero_choice = new OptionButton();
@@ -230,6 +241,8 @@ public class HUD : CanvasLayer
     public OptionButton leader_choice = new OptionButton();
     public OptionButton monster_choice = new OptionButton();
 
+    public OptionButton destination_choice = new OptionButton();
+
     public RichTextLabel menu_text = new RichTextLabel();
 
     Vector2 tb_range_1 = new Vector2(0.2f, 0.3f);
@@ -246,23 +259,27 @@ public class HUD : CanvasLayer
     {
         FollowViewportEnable = true;
 
-        hero_choice = addOptionButton(tb_range_3, lr_range_2, (int)card_item.First, (int)card_item.First+7);
+        hero_choice = addOptionButton(tb_range_3, lr_range_1, (int)card_item.First, (int)card_item.First+7);
         
-        bard_choice = addOptionButton(tb_range_3, lr_range_3, (int)card_hero.Bard_First, (int)card_hero.Bard_First+7);
-        fighter_choice = addOptionButton(tb_range_3, lr_range_3, (int)card_hero.Fighter_First, (int)card_hero.Fighter_First+7);
-        guardian_choice = addOptionButton(tb_range_3, lr_range_3, (int)card_hero.Guardian_First, (int)card_hero.Guardian_First+7);
-        ranger_choice = addOptionButton(tb_range_3, lr_range_3, (int)card_hero.Ranger_First, (int)card_hero.Ranger_First+7);
-        thief_choice = addOptionButton(tb_range_3, lr_range_3, (int)card_hero.Thief_First, (int)card_hero.Thief_First+7);
-        wizard_choice = addOptionButton(tb_range_3, lr_range_3, (int)card_hero.Wizard_First, (int)card_hero.Wizard_First+7);
-        warrior_choice = addOptionButton(tb_range_3, lr_range_3, (int)card_hero.Warrior_First, (int)card_hero.Warrior_First+7);
-        druid_choice = addOptionButton(tb_range_3, lr_range_3, (int)card_hero.Druid_First, (int)card_hero.Druid_First+7);
+        bard_choice = addOptionButton(tb_range_3, lr_range_2, (int)card_hero.Bard_First, (int)card_hero.Bard_First+7);
+        fighter_choice = addOptionButton(tb_range_3, lr_range_2, (int)card_hero.Fighter_First, (int)card_hero.Fighter_First+7);
+        guardian_choice = addOptionButton(tb_range_3, lr_range_2, (int)card_hero.Guardian_First, (int)card_hero.Guardian_First+7);
+        ranger_choice = addOptionButton(tb_range_3, lr_range_2, (int)card_hero.Ranger_First, (int)card_hero.Ranger_First+7);
+        thief_choice = addOptionButton(tb_range_3, lr_range_2, (int)card_hero.Thief_First, (int)card_hero.Thief_First+7);
+        wizard_choice = addOptionButton(tb_range_3, lr_range_2, (int)card_hero.Wizard_First, (int)card_hero.Wizard_First+7);
+        warrior_choice = addOptionButton(tb_range_3, lr_range_2, (int)card_hero.Warrior_First, (int)card_hero.Warrior_First+7);
+        druid_choice = addOptionButton(tb_range_3, lr_range_2, (int)card_hero.Druid_First, (int)card_hero.Druid_First+7);
         
-        item_choice = addOptionButton(tb_range_3, lr_range_2, (int)card_item.First, (int)card_item.Last);
-        magic_choice = addOptionButton(tb_range_3, lr_range_2, (int)card_magic.First, (int)card_magic.Last);
-        instant_choice = addOptionButton(tb_range_3, lr_range_2, (int)card_instant.First, (int)card_instant.Last);
-        leader_choice = addOptionButton(tb_range_3, lr_range_2, (int)card_party_leader.First, (int)card_party_leader.Last);
-        monster_choice = addOptionButton(tb_range_3, lr_range_2, (int)card_monster.First, (int)card_monster.Last);
+        item_choice = addOptionButton(tb_range_3, lr_range_1, (int)card_item.First, (int)card_item.Last);
+        magic_choice = addOptionButton(tb_range_3, lr_range_1, (int)card_magic.First, (int)card_magic.Last);
+        instant_choice = addOptionButton(tb_range_3, lr_range_1, (int)card_instant.First, (int)card_instant.Last);
+        leader_choice = addOptionButton(tb_range_3, lr_range_1, (int)card_party_leader.First, (int)card_party_leader.Last);
+        monster_choice = addOptionButton(tb_range_3, lr_range_1, (int)card_monster.First, (int)card_monster.Last);
 
+        destination_choice = addOptionButton(tb_range_3, lr_range_3, (int)destinations.First, (int)destinations.Last);
+
+        add_card_btn = addButton("Add", tb_range_1, lr_range_2);
+        rmv_card_btn = addButton("Remove", tb_range_1, lr_range_3);
         back_btn = addButton("Back...", tb_range_1, lr_range_1);
 
         hero = addButton("hero", tb_range_3, lr_range_1);
@@ -342,7 +359,7 @@ public class HUD : CanvasLayer
         return;
     }
 
-    public void menuHide()
+    public void chooseCard()
     {
         hero.Hide();
         item.Hide();
@@ -352,10 +369,13 @@ public class HUD : CanvasLayer
         monster.Hide();
         menu_text.Hide();
         back_btn.Show();
+        add_card_btn.Show();
+        rmv_card_btn.Show();
+        
         return;
     }
 
-    public void menuShow()
+    public void mainMenu()
     {
         hero.Show();
         item.Show();
@@ -365,18 +385,42 @@ public class HUD : CanvasLayer
         monster.Show();
         menu_text.Show();
         
-        back_btn.Hide();
-
         hero_choice.Hide();
         item_choice.Hide();
         magic_choice.Hide();
         instant_choice.Hide();
         leader_choice.Hide();
         monster_choice.Hide();
+
+        add_card_btn.Hide();
+        rmv_card_btn.Hide();
+        back_btn.Hide();
         
         hideHeroChoices(0);
 
         return;
+    }
+
+    public int getCurrentChoice()
+    {
+        int choice = 0;
+
+        if (bard_choice.Visible == true) {choice = bard_choice.GetSelectedId();}
+        if (fighter_choice.Visible == true) {choice = fighter_choice.GetSelectedId();}
+        if (guardian_choice.Visible == true) {choice = guardian_choice.GetSelectedId();}
+        if (ranger_choice.Visible == true) {choice = ranger_choice.GetSelectedId();}
+        if (thief_choice.Visible == true) {choice = thief_choice.GetSelectedId();}
+        if (wizard_choice.Visible == true) {choice = wizard_choice.GetSelectedId();}
+        if (warrior_choice.Visible == true) {choice = warrior_choice.GetSelectedId();}
+        if (druid_choice.Visible == true) {choice = druid_choice.GetSelectedId();}
+        
+        if (item_choice.Visible == true) {choice = item_choice.GetSelectedId();}
+        if (magic_choice.Visible == true) {choice = magic_choice.GetSelectedId();}
+        if (instant_choice.Visible == true) {choice = instant_choice.GetSelectedId();}
+        if (leader_choice.Visible == true) {choice = leader_choice.GetSelectedId();}
+        if (monster_choice.Visible == true) {choice = monster_choice.GetSelectedId();}
+
+        return choice;
     }
 
     int hero_selected = -1;
@@ -393,9 +437,12 @@ public class HUD : CanvasLayer
         
         if (back_btn.Pressed == true)
         {
-            menuShow();
+            mainMenu();
             response_value = (int)buttons.Back;
         }
+
+        if (add_card_btn.Pressed == true) {GD.Print("adding...", card_names[getCurrentChoice()]);}
+        if (rmv_card_btn.Pressed == true) {GD.Print("removing...", card_names[getCurrentChoice()]);}
 
         if (hero.Pressed == true || hero_selected != hero_choice.Selected)
         {
