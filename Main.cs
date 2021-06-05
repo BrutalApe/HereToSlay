@@ -55,7 +55,7 @@ public class Main : Node
     public override void _Process(float delta)
     {
         int result = 0;
-
+        
         result = (int)HUD.Call("buttonProcess", delta);
 
         if (result == 0)

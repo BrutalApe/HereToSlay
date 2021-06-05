@@ -9,6 +9,7 @@ enum buttons{
     Leader = 6,
     Monster = 7,
     Back = 10,
+    Display = 11,
 }
 
 enum card_hero {
@@ -224,6 +225,8 @@ public class HUD : CanvasLayer
     public Button rmv_card_btn = new Button();
     public Button back_btn = new Button();
 
+    public Button display_btn = new Button();
+
     public OptionButton hero_choice = new OptionButton();
 
     public OptionButton bard_choice = new OptionButton();
@@ -243,7 +246,7 @@ public class HUD : CanvasLayer
 
     public OptionButton destination_choice = new OptionButton();
 
-    public RichTextLabel menu_text = new RichTextLabel();
+    public RichTextLabel hand_text = new RichTextLabel();
 
     Vector2 tb_range_1 = new Vector2(0.2f, 0.3f);
     Vector2 tb_range_2 = new Vector2(0.4f, 0.5f);
@@ -253,6 +256,10 @@ public class HUD : CanvasLayer
     Vector2 lr_range_2 = new Vector2(0.4f, 0.6f);
     Vector2 lr_range_3 = new Vector2(0.7f, 0.9f);
 
+    int hand_size = 200;
+    int party_size = 200;
+    int[] hand = new int[200];
+    int[] party = new int[200];
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -281,6 +288,7 @@ public class HUD : CanvasLayer
         add_card_btn = addButton("Add", tb_range_1, lr_range_2);
         rmv_card_btn = addButton("Remove", tb_range_1, lr_range_3);
         back_btn = addButton("Back...", tb_range_1, lr_range_1);
+        display_btn = addButton("Display", tb_range_2, lr_range_2);
 
         hero = addButton("hero", tb_range_3, lr_range_1);
         item = addButton("item", tb_range_3, lr_range_2);
@@ -288,8 +296,6 @@ public class HUD : CanvasLayer
         instant = addButton("instant", tb_range_4, lr_range_1);
         leader = addButton("leader", tb_range_4, lr_range_2);
         monster = addButton("monster", tb_range_4, lr_range_3);
-
-        menu_text = addText("Pick a card category", tb_range_2, lr_range_2);
     }
 
     public RichTextLabel addText(string text, Vector2 t_b, Vector2 l_r)
@@ -359,6 +365,30 @@ public class HUD : CanvasLayer
         return;
     }
 
+    public void hideAllButtons()
+    {
+        hero.Hide();
+        item.Hide();
+        magic.Hide();
+        instant.Hide();
+        leader.Hide();
+        monster.Hide();
+
+        hero_choice.Hide();
+        hideHeroChoices(0);
+        item_choice.Hide();
+        magic_choice.Hide();
+        instant_choice.Hide();
+        leader_choice.Hide();
+        monster_choice.Hide();
+        destination_choice.Hide();
+
+        add_card_btn.Hide();
+        rmv_card_btn.Hide();
+        back_btn.Hide();
+        display_btn.Hide();
+    }
+
     public void chooseCard()
     {
         hero.Hide();
@@ -367,7 +397,7 @@ public class HUD : CanvasLayer
         instant.Hide();
         leader.Hide();
         monster.Hide();
-        menu_text.Hide();
+        destination_choice.Show();
         back_btn.Show();
         add_card_btn.Show();
         rmv_card_btn.Show();
@@ -377,27 +407,16 @@ public class HUD : CanvasLayer
 
     public void mainMenu()
     {
+        hideAllButtons();
+
         hero.Show();
         item.Show();
         magic.Show();
         instant.Show();
         leader.Show();
         monster.Show();
-        menu_text.Show();
+        display_btn.Show();
         
-        hero_choice.Hide();
-        item_choice.Hide();
-        magic_choice.Hide();
-        instant_choice.Hide();
-        leader_choice.Hide();
-        monster_choice.Hide();
-
-        add_card_btn.Hide();
-        rmv_card_btn.Hide();
-        back_btn.Hide();
-        
-        hideHeroChoices(0);
-
         return;
     }
 
@@ -430,6 +449,47 @@ public class HUD : CanvasLayer
         return choice;
     }
 
+    public void displayHand()
+    {
+        string hand_string = "";
+        for (int i = 0; i < hand_size; i++)
+        {
+            if (hand[i] != 0)
+            {
+                hand_string.Insert(0, card_names[hand[i]]);
+            }
+        }
+
+        hand_text = addText(hand_string, tb_range_2, lr_range_1);
+        hand_text.Show();
+        return;
+    }
+
+    public void addToDest()
+    {
+        int dest = getCurrentDestChoice();
+        int choice = getCurrentChoice();
+        if (dest == (int)destinations.Hand)
+        {
+            for (int i = 0; i < hand_size; i++)
+            {
+                if (hand[i] == choice)
+                {
+                    // for now, assume one of every card.
+                    // this will be smarter eventually, 
+                    // since some cards have duplicates
+                    return;
+                }
+                if (hand[i] == 0)
+                {
+                    hand[i] = choice;
+                    return;
+                }
+            }
+        }
+        return;
+    }
+
     int hero_selected = -1;
     public int buttonProcess(float delta)
     {
@@ -448,7 +508,14 @@ public class HUD : CanvasLayer
             response_value = (int)buttons.Back;
         }
 
-        if (add_card_btn.Pressed == true) {GD.Print("adding...", card_names[getCurrentChoice()], " to ", card_names[getCurrentDestChoice()]);}
+        if (display_btn.Pressed == true)
+        {
+            hideAllButtons();
+            back_btn.Show();
+            displayHand();
+        }
+
+        if (add_card_btn.Pressed == true) {addToDest();}
         if (rmv_card_btn.Pressed == true) {GD.Print("removing...", card_names[getCurrentChoice()], " from ", card_names[getCurrentDestChoice()]);}
 
         if (hero.Pressed == true || hero_selected != hero_choice.Selected)
