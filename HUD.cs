@@ -423,6 +423,13 @@ public class HUD : CanvasLayer
         return choice;
     }
 
+    public int getCurrentDestChoice()
+    {
+        int choice = 0;
+        if (destination_choice.Visible == true) {choice = destination_choice.GetSelectedId();}
+        return choice;
+    }
+
     int hero_selected = -1;
     public int buttonProcess(float delta)
     {
@@ -441,8 +448,8 @@ public class HUD : CanvasLayer
             response_value = (int)buttons.Back;
         }
 
-        if (add_card_btn.Pressed == true) {GD.Print("adding...", card_names[getCurrentChoice()]);}
-        if (rmv_card_btn.Pressed == true) {GD.Print("removing...", card_names[getCurrentChoice()]);}
+        if (add_card_btn.Pressed == true) {GD.Print("adding...", card_names[getCurrentChoice()], " to ", card_names[getCurrentDestChoice()]);}
+        if (rmv_card_btn.Pressed == true) {GD.Print("removing...", card_names[getCurrentChoice()], " from ", card_names[getCurrentDestChoice()]);}
 
         if (hero.Pressed == true || hero_selected != hero_choice.Selected)
         {
