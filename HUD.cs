@@ -457,7 +457,7 @@ public class HUD : CanvasLayer
         {
             if (hand[i] != 0)
             {
-                if (i != 0)
+                if (char_index != 0)
                 {
                     hand_string = hand_string.Insert(char_index, ", ");
                     char_index += 2;
@@ -497,6 +497,23 @@ public class HUD : CanvasLayer
         return;
     }
 
+    public void removeFromDest()
+    {
+        int dest = getCurrentDestChoice();
+        int choice = getCurrentChoice();
+        if (dest == (int)destinations.Hand)
+        {
+            for (int i = 0; i < hand_size; i++)
+            {
+                if (hand[i] == choice)
+                {
+                    hand[i] = 0;
+                }
+            }
+        }
+        return;
+    }
+
     int hero_selected = -1;
     public int buttonProcess(float delta)
     {
@@ -525,7 +542,7 @@ public class HUD : CanvasLayer
         }
 
         if (add_card_btn.Pressed == true) {addToDest();}
-        if (rmv_card_btn.Pressed == true) {GD.Print("removing...", card_names[getCurrentChoice()], " from ", card_names[getCurrentDestChoice()]);}
+        if (rmv_card_btn.Pressed == true) {removeFromDest();}
 
         if (hero.Pressed == true || hero_selected != hero_choice.Selected)
         {
