@@ -181,8 +181,8 @@ enum card_monster {
 };
 
 enum destinations {
-    Party = 131,
-    Hand = 132,
+    Hand = 131,
+    Party = 132,
     First = 131,
     Last = 132,
 };
@@ -212,7 +212,7 @@ public class HUD : CanvasLayer
 	
     "Dracos","Arctic Aries","Terratuga","Abyss Queen","Bloodwing","Crowned Serpent","Dark Dragon King","Titan Wyvern","Rex Major","Malamammoth","Warworn Owlbear","Orthus","Anuran Cauldron","Corrupted Sabretooth","Mega Slime","Muscipula Rex","Feral Dragon",
 
-    "Party", "Hand"
+    "Hand", "Party"
     };
 
     public Button hero = new Button();
@@ -452,11 +452,18 @@ public class HUD : CanvasLayer
     public void displayHand()
     {
         string hand_string = "";
-        for (int i = 0; i < hand_size; i++)
+        int char_index = 0;
+        for (int i = 0; i < 200; i++)
         {
             if (hand[i] != 0)
             {
-                hand_string.Insert(0, card_names[hand[i]]);
+                if (i != 0)
+                {
+                    hand_string = hand_string.Insert(char_index, ", ");
+                    char_index += 2;
+                }
+                hand_string = hand_string.Insert(char_index, card_names[hand[i]]);
+                char_index += card_names[hand[i]].Length;
             }
         }
 
@@ -505,6 +512,8 @@ public class HUD : CanvasLayer
         if (back_btn.Pressed == true)
         {
             mainMenu();
+            hand_text.Text = "";
+            hand_text.Hide();
             response_value = (int)buttons.Back;
         }
 
